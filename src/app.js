@@ -1,0 +1,10 @@
+const express=require('express');
+const tasks=require('./routes/tasks');
+const app=express();
+app.use(express.json());
+app.get('/',(req,res)=>res.json({message:'Week 3 Task Manager API',health:'/health',tasks:'/api/tasks'}));
+app.get('/health',(req,res)=>res.status(200).json({status:'ok'}));
+app.use('/api/tasks',tasks);
+app.use((req,res,next)=>{const e=new Error(`Route not found: ${req.method} ${req.originalUrl}`);e.statusCode=404;next(e);});
+app.use(require('./middleware/errorHandler'));
+module.exports=app;
